@@ -1,0 +1,29 @@
+{
+  "name": "simplegobang",
+  "version": "1.0.0",
+  "description": "a simple gobang game",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ckzhou/simpleGobang.git"
+  },
+  "keywords": [
+    "canvas",
+    "vuejs"
+  ],
+  "author": "zhouzh1",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ckzhou/simpleGobang/issues"
+  },
+  "homepage": "https://github.com/ckzhou/simpleGobang#readme",
+  "dependencies": {
+    "autoprefixer": "^7.1.4",
+    "browser-sync": "^2.18.13",
+    "gulp": "^3.9.1",
+    "gulp-postcss": "^7.0.0"
+  }
+}

@@ -1,0 +1,104 @@
+body {
+	font-family: "Microsoft yahei";
+	background-color: #a47208;
+	position: relative;
+	color: #1eb830;
+}
+.body-wrapper {
+	width: 45%;
+	margin: 0 auto;
+}
+@media screen and (max-width: 768px) {
+	body {
+		background-color: #e2c983
+	}
+	.body-wrapper {
+		width: 100%;
+	}
+	.signal {
+		display: none !important;
+	}
+}
+.header {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	    -ms-flex-flow: row nowrap;
+	        flex-flow: row nowrap;
+	-webkit-box-pack: center;
+	    -ms-flex-pack: center;
+	        justify-content: center;
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;
+	padding: 2em 0;
+}
+.chess {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	    -ms-flex-flow: row nowrap;
+	        flex-flow: row nowrap;
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;	
+}
+.dir-icon:after {
+	color: transparent;
+	font-style: normal;
+	content: "\00a0\2746\00a0";
+}
+.dir-icon-active:after {
+	color: inherit;
+}
+.chess-icon {
+	display: inline-block;
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 50%;
+	background-size: 100%;
+}
+.white-chess {
+	background-image: url('../../images/white-chess.png');
+}
+.black-chess {
+	background-image: url('../../images/black-chess.png');
+}
+.control-btn {
+	background-color: transparent;
+	border: 1px solid #1eb830;
+	border-radius: 0.2em;
+	line-height: 1.5em;
+	margin: 0 2em;
+	padding: 0 0.5em;
+	outline: none;
+	color: #1eb830;
+	cursor: pointer;
+}
+.chessboard {
+	width: 100%;
+	-webkit-box-sizing: border-box;
+	        box-sizing: border-box;
+}
+.chessboard canvas {
+	width: 100%;
+}
+.control-btn, .chessboard canvas {
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	-webkit-touch-callout: none;
+}
+.signal {
+	display: none;
+	width: 0.5em;
+	height: 0.5em;
+	cursor: pointer;
+	position: absolute;
+	border-radius: 50%;
+	background-color: #000;
+	-webkit-transform: translate(-50%, -50%);
+	        transform: translate(-50%, -50%);
+}

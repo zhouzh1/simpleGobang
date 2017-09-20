@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Play</title>
+    <link href="https://cdn.bootcss.com/normalize/7.0.0/normalize.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/dist/main.css">
+</head>
+<body>
+    <div class="body-wrapper" id="chessgame">
+        <header class="header">
+            <div class="chess"></span><i class="chess-icon white-chess"></i><i class="dir-icon" id="dir-left"></i></div>
+            <button type="button" class="control-btn" id="control-btn" data-action="start">开始</button>
+            <div class="chess"><i class="dir-icon" id="dir-right"></i><i class="chess-icon black-chess"></i></div>
+        </header>
+        <section class="chessboard">
+            <canvas id="canvas">Your browser does not support canvas!</canvas>
+            <div class="signal" id="signal"></div>
+        </section>
+    </div>
+    <script src="./js/zepto.js"></script>
+    <script src="./js/main.js"></script>
+    <script>
+        $(document).ready(function onload() {
+            let game = gobang();
+            game.init();
+        });
+    </script>
+</body>
+</html>
