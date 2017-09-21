@@ -316,7 +316,7 @@ function gobang() {
 		let canvas = $(register.canvasEle);
 		let signal = $(register.signalEle);
 		canvas.off('mousemove', show_signal);
-		canvas.off('touchend, click', show_signal);
+		canvas.off('touchend, click', drop_chess);
 		signal.off('click', drop_chess);
 	}
 
