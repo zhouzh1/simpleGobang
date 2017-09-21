@@ -113,7 +113,7 @@ function gobang() {
 		event = event ? event : window.event;
 		let mouse_x = event.clientX;
 		let mouse_y = event.clientY;
-		let radius = register.cellWidth / 2;    // 落子点区域半径
+		let radius = register.cellWidth / 2;    // 落子点区域边长
 		for (let row = 0; row <= DIMENSION; row++) {
 			for (let col = 0; col <= DIMENSION; col++) {
 				let coordinate = register.coordinates[row][col];

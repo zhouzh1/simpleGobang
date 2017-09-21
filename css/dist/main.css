@@ -8,9 +8,9 @@ body {
 	width: 45%;
 	margin: 0 auto;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1024px) {
 	body {
-		background-color: #e2c983
+		background-color: #e2c983;
 	}
 	.body-wrapper {
 		width: 100%;
