@@ -81,28 +81,27 @@ function gobang() {
 	* 将棋盘上的落子点(线条交点)的坐标，行号，列号，以及初始状态映射至二维数组
 	*/
 	function map_chessboard(canvasEle) {
-		let coordinates = [];
-		let states = [];
+		let positions = [];
 		let offset = register.offset;
 		let width_cell = register.cellWidth;
 		let offset_x = canvasEle.offsetLeft + offset, offset_y = canvasEle.offsetTop + offset;
 		for (let row = 0; row <= DIMENSION; row++) {
-			coordinates[row] = [];
-			states[row] = [];
+			positions[row] = [];
 			for (let col = 0; col <= DIMENSION; col++) {
-				coordinates[row][col] = {
-					x: offset_x + col * width_cell,
-					y: offset_y + row * width_cell,
-					row: row,
-					col: col
-				};
-				states[row][col] = {
-					chessColor: EMPTY
+				positions[row][col] = {
+					coordinate: {
+						x: offset_x + col * width_cell,
+						y: offset_y + row * width_cell,
+						row: row,
+						col: col
+					},
+					state: {
+						chessColor: EMPTY
+					}
 				};
 			}
 		}
-		register.coordinates = coordinates;
-		register.states = states;
+		register.positions = positions;
 	}
 
 	/* 
@@ -113,15 +112,16 @@ function gobang() {
 		event = event ? event : window.event;
 		let mouse_x = event.clientX;
 		let mouse_y = event.clientY;
-		let radius = register.cellWidth / 2;    // 落子点区域边长
+		let range = register.cellWidth / 2;    // 落子点区域边长
 		for (let row = 0; row <= DIMENSION; row++) {
 			for (let col = 0; col <= DIMENSION; col++) {
-				let coordinate = register.coordinates[row][col];
-				let state = register.states[row][col];
+				let currentPos = register.positions[row][col];
+				let coordinate = currentPos.coordinate;
+				let state = currentPos.state;
 				let x = coordinate.x;
 				let y = coordinate.y;
-				if (mouse_x >= (x - radius) && mouse_x <= (x + radius) && mouse_y >= (y - radius) && mouse_y <= (y + radius)) {
-					register.currentPos = {coordinate, state};
+				if (mouse_x >= (x - range) && mouse_x <= (x + range) && mouse_y >= (y - range) && mouse_y <= (y + range)) {
+					register.currentPos = currentPos;
 					if (state.chessColor === EMPTY) {
 						return true;
 					} else {
@@ -189,10 +189,10 @@ function gobang() {
 					alert('势均力敌，不分胜负!');
 				} else {
 					// 分出胜负，画出红色的五子连线
-					let start_x = ret.start.x - canvasEle.offsetLeft - offset;
-					let start_y = ret.start.y - canvasEle.offsetTop - offset;
-					let end_x = ret.end.x - canvasEle.offsetLeft - offset;
-					let end_y = ret.end.y - canvasEle.offsetTop - offset;
+					let start_x = ret.start.coordinate.x - canvasEle.offsetLeft - offset;
+					let start_y = ret.start.coordinate.y - canvasEle.offsetTop - offset;
+					let end_x = ret.end.coordinate.x - canvasEle.offsetLeft - offset;
+					let end_y = ret.end.coordinate.y - canvasEle.offsetTop - offset;
 					context.beginPath();
 					context.moveTo(start_x, start_y);
 					context.lineTo(end_x, end_y);
@@ -208,24 +208,23 @@ function gobang() {
 
 	// 输赢判断
 	function judge(row, col, walker) {
-		let coordinates = register.coordinates;
-		let states = register.states;
+		let positions = register.positions;
 		// 水平方向判断
 		for (let i = 0; i < 5; i++) {
 			let cursor = col - i;
-			if (coordinates[row][cursor] === undefined || states[row][cursor].chessColor !== walker) {
+			if (positions[row][cursor] === undefined || positions[row][col].state.chessColor !== walker) {
 				break;
 			}
 			for (let j = 1; j < 5; j++) {
-				if (coordinates[row][cursor + j] === undefined) {
+				if (positions[row][cursor + j] === undefined) {
 					break;
-				} else if (states[row][cursor + j].chessColor === walker) {
+				} else if (positions[row][cursor + j].state.chessColor === walker) {
 					if (j == 4) {
 						register.isFinish = true;
 						return {
 							winner: walker,
-							start: coordinates[row][cursor],
-							end: coordinates[row][cursor + 4]
+							start: positions[row][cursor],
+							end: positions[row][cursor + 4]
 						};
 					} 
 				} else {
@@ -236,19 +235,19 @@ function gobang() {
 		// 垂直方向判断
 		for (let i = 0; i < 5; i++) {
 			let cursor = row + i;
-			if (coordinates[cursor][col] === undefined || states[cursor][col].chessColor != walker) {
+			if (positions[cursor][col] === undefined || positions[cursor][col].state.chessColor != walker) {
 				break;
 			}
 			for (let j = 1; j < 5; j++) {
-				if (coordinates[cursor - j] === undefined || coordinates[cursor - j][col] === undefined) {
+				if (positions[cursor - j] === undefined || positions[cursor - j][col] === undefined) {
 					break;
-				} else if (states[cursor - j][col].chessColor === walker) {
+				} else if (positions[cursor - j][col].state.chessColor === walker) {
 					if (j == 4) {
 						register.isFinish = true;
 						return {
 							winner: walker,
-							start: coordinates[cursor][col],
-							end: coordinates[cursor - 4][col] 
+							start: positions[cursor][col],
+							end: positions[cursor - 4][col] 
 						};
 					}
 				} else {
@@ -259,19 +258,19 @@ function gobang() {
 		// 正对角线方向判断
 		for (let i = 0; i < 5; i++) {
 			let cursor_x = row - i, cursor_y = col - i;
-			if (coordinates[cursor_x] === undefined || coordinates[cursor_x][cursor_y] === undefined || states[cursor_x][cursor_y].chessColor != walker) {
+			if (positions[cursor_x] === undefined || positions[cursor_x][cursor_y] === undefined || positions[cursor_x][cursor_y].state.chessColor != walker) {
 				break;
 			}
 			for (let j = 1; j < 5; j++) {
-				if (coordinates[cursor_x + j] === undefined || coordinates[cursor_x + j][cursor_y + j] === undefined) {
+				if (positions[cursor_x + j] === undefined || positions[cursor_x + j][cursor_y + j] === undefined) {
 					break;
-				} else if (states[cursor_x + j][cursor_y + j].chessColor === walker) {
+				} else if (positions[cursor_x + j][cursor_y + j].state.chessColor === walker) {
 					if (j == 4) {
 						register.isFinish = true;
 						return {
 							winner: walker,
-							start: coordinates[cursor_x][cursor_y],
-							end: coordinates[cursor_x + 4][cursor_y + 4]
+							start: positions[cursor_x][cursor_y],
+							end: positions[cursor_x + 4][cursor_y + 4]
 						}
 					}
 				} else {
@@ -282,19 +281,19 @@ function gobang() {
 		// 反对角线方向判断
 		for (let i = 0; i < 5; i++) {
 			let cursor_x = row - i, cursor_y = col + i;
-			if (coordinates[cursor_x] === undefined || coordinates[cursor_x][cursor_y] === undefined || states[cursor_x][cursor_y].chessColor !== walker) {
+			if (positions[cursor_x] === undefined || positions[cursor_x][cursor_y] === undefined || positions[cursor_x][cursor_y].state.chessColor !== walker) {
 				break;
 			}
 			for (let j = 1; j < 5; j++) {
-				if (coordinates[cursor_x + j] === undefined || coordinates[cursor_x + j][cursor_y - j] === undefined) {
+				if (positions[cursor_x + j] === undefined || positions[cursor_x + j][cursor_y - j] === undefined) {
 					break;
-				} else if (states[cursor_x + j][cursor_y - j].chessColor === walker) {
+				} else if (positions[cursor_x + j][cursor_y - j].state.chessColor === walker) {
 					if (j == 4) {
 						register.isFinish = true;
 						return {
 							winner: walker,
-							start: coordinates[cursor_x][cursor_y],
-							end: coordinates[cursor_x + 4][cursor_y - 4]
+							start: positions[cursor_x][cursor_y],
+							end: positions[cursor_x + 4][cursor_y - 4]
 						}
 					}
 				} else {
